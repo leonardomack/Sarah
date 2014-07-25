@@ -1,2 +1,1 @@
-mqtt-paho-android
-=================
+Paho Java client for MQTT
