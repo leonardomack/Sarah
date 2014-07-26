@@ -21,8 +21,8 @@ public class ActivityConstants
 	public static final boolean defaultRetained = false;
 	/** Default last will message */
 	public static final MqttMessage defaultLastWill = null;
-	/** Default port */
-	public static final int defaultPort = 1883;
+	/** Default port 1883*/
+	public static final int defaultPort = 60001;
 
 	/** Connect Request Code */
 	public static final int connect = 0;

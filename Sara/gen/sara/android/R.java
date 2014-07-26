@@ -1247,14 +1247,24 @@ containing a value of this type.
         public static final int connectedto=0x7f0a0012;
         public static final int connecting=0x7f0a0015;
         public static final int connectionError=0x7f0a0017;
+        public static final int connection_lost=0x7f0a001d;
         /**  Formatting 
          */
         public static final int dateFormat=0x7f0a0010;
         public static final int disconnected=0x7f0a0013;
         public static final int disconnecting=0x7f0a0016;
         public static final int hello_world=0x7f0a000e;
+        public static final int messageRecieved=0x7f0a001f;
         public static final int no_status=0x7f0a0014;
+        public static final int notification=0x7f0a0020;
+        public static final int notifyTitle=0x7f0a0021;
+        public static final int notifyTitle_connectionLost=0x7f0a001e;
         public static final int timestamp=0x7f0a0011;
+        public static final int toast_disconnected=0x7f0a001a;
+        public static final int toast_pub_failed=0x7f0a001b;
+        public static final int toast_pub_success=0x7f0a0018;
+        public static final int toast_sub_failed=0x7f0a001c;
+        public static final int toast_sub_success=0x7f0a0019;
     }
     public static final class style {
         /** 

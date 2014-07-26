@@ -66,7 +66,7 @@ public class Connection
 	/**
 	 * Connections status for a connection
 	 */
-	enum ConnectionStatus
+	public enum ConnectionStatus
 	{
 
 		/** Client is Connecting **/
