@@ -17,6 +17,9 @@ public class Device implements ISaraEvent
 
 		sara.start();
 		sara.tryToFindSaraCentral();
+		sara.stop();
+		
+		System.exit(0);
 	}
 
 	@Override
@@ -36,14 +39,14 @@ public class Device implements ISaraEvent
 	public void onThingIdRequested(EventObject sender, SaraEventArgs e)
 	{
 		System.out.println("=== onThingIdRequested ===");
-		sara.sendThingId("meu id");
+		sara.sendThingId();
 	}
 
 	@Override
 	public void onThingOperationsUrlRequested(EventObject sender, SaraEventArgs e)
 	{
 		System.out.println("=== onThingOperationsUrlRequested ===");
-		sara.sendThingOperationsUrl("http://sara.com");
+		sara.sendThingOperationsUrl();
 	}
 
 	@Override

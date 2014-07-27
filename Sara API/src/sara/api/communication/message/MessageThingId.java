@@ -1,15 +1,18 @@
 package sara.api.communication.message;
 
-import sara.api.interfaces.IMessage;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MessageThingId implements IMessage
+import sara.api.tools.SaraConstants;
+
+public class MessageThingId extends SaraMessage
 {
-
-	@Override
-	public void sendMessage()
+	public MessageThingId(String thingId)
 	{
-		// TODO Auto-generated method stub
-		
+		MqttMessage message = new MqttMessage(thingId.getBytes());
+		message.setQos(2);
+
+		super.setTopic(SaraConstants.SARA_ROOT_TOPIC);
+		super.setMqttMessage(message);
 	}
 
 }
