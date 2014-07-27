@@ -182,7 +182,7 @@ public class StartActivity extends ActionBarActivity
 		{
 			try
 			{				
-				client.connect(conOpt, null, callback);
+				client.connect(conOpt, null, callback);				
 			}
 			catch (MqttException e)
 			{
