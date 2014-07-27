@@ -123,7 +123,7 @@ public class StartActivity extends ActionBarActivity
 		// last will message
 		String message = "";
 		String topic = "";
-		Integer qos = 0;
+		Integer qos = 2;
 		Boolean retained = false;
 
 		// connection options
