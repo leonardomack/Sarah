@@ -1,1 +1,1 @@
-Paho Java client for MQTT
+Sara Internet of Things platform
