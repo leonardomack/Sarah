@@ -1,1 +1,1 @@
-Sara Internet of Things platform
+Sara Internet of Things platform.
