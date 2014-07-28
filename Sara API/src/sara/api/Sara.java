@@ -19,15 +19,19 @@ import sara.api.communication.message.MessageHandShakeConfirmation;
 import sara.api.communication.message.MessageOperationsUrl;
 import sara.api.communication.message.MessageThingId;
 import sara.api.communication.message.SaraMessage;
+import sara.api.handler.LogEventArgs;
 import sara.api.handler.SaraEventArgs;
+import sara.api.interfaces.ILogEvent;
 import sara.api.interfaces.ISaraEvent;
 import sara.api.tools.SaraConstants;
+import sara.api.tools.SaraLog;
 import sara.api.tools.SaraStatus;
 
 public class Sara extends EventObject implements Runnable, MqttCallback
 {
 	// Properties
 	private static final long serialVersionUID = 4335218002356779457L;
+	private SaraLog log;
 	private List<ISaraEvent> eventListeners;
 	private SaraStatus saraStatus;
 	private Thread threadSara;
@@ -44,6 +48,7 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 		super(sender);
 
 		// New instances and default values
+		log = new SaraLog(this);
 		eventListeners = new ArrayList<ISaraEvent>();
 		saraStatus = SaraStatus.OFFLINE;
 		isRunning = false;
@@ -51,6 +56,9 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 		messagesToSend = new LinkedList<SaraMessage>();
 		thingId = "Device01";
 		operationsUrl = "http://sara.com";
+
+		// Log
+		log.add("Sara created");
 	}
 
 	// Public methods
@@ -76,7 +84,8 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 					// Setting configurations
 					sampleClient = new MqttClient(serverBroker, thingId, persistence);
 
-					System.out.println("Try broker connection: " + serverBroker);
+					// Log
+					log.add("Try broker connection: " + serverBroker);
 
 					try
 					{
@@ -96,6 +105,8 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 						if (ex instanceof ConnectException)
 						{
 							// Server not found, try another one
+							// Log
+							log.add("Server not found, try another address");
 						}
 						else if (ex instanceof MqttException)
 						{
@@ -106,11 +117,17 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 							System.out.println("cause " + ex.getCause());
 							System.out.println("excep " + ex);
 							ex.printStackTrace();
+
+							// Log
+							log.add("Sara connection is not working");
 						}
 						else
 						{
 							// Main exception
 							ex.printStackTrace();
+
+							// Log
+							log.add("Sara is not responding");
 						}
 					}
 				}
@@ -143,6 +160,8 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 			threadSara.start();
 		}
 
+		// Log
+		log.add("Sara started");
 	}
 
 	public void stop()
@@ -178,6 +197,11 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 
 	}
 
+	public SaraLog getSaraLog()
+	{
+		return this.log;
+	}
+
 	/*
 	 * Coordenates received messages
 	 */
@@ -206,7 +230,8 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 			}
 		}
 
-		System.out.println("Message received!!! " + message.toString());
+		// Log
+		log.add("Message received from Sara Central: " + message.toString());
 	}
 
 	@Override
@@ -285,5 +310,4 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 			((ISaraEvent) i.next()).onSignalReceived(sender, e);
 		}
 	}
-
 }
