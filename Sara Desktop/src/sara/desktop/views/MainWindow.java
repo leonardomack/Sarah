@@ -23,6 +23,7 @@ import sara.api.handler.SaraEventArgs;
 import sara.api.interfaces.ILogEvent;
 import sara.api.interfaces.ISaraEvent;
 import sara.api.tools.SaraLog;
+import sara.api.tools.SmartScroller;
 
 public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 {
@@ -38,6 +39,7 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 	private JButton btnSendHandShake;
 	private JButton btnSendUrl;
 	private JButton btnSendSignal;
+	private JScrollPane logScrollPane;
 	private JTextArea txtLog;
 
 	// Device
@@ -60,9 +62,8 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 		btnSendUrl = new JButton("Send url");
 		btnSendSignal = new JButton("Send signal");
 		txtLog = new JTextArea();
-
-		// ScrollPane scrollPane = new JScrollPane(txtLog);
-		// new SmartScroller(scrollPane);
+		logScrollPane = new JScrollPane(txtLog);
+		new SmartScroller(logScrollPane, SmartScroller.HORIZONTAL, SmartScroller.END);
 
 		// Sara control
 		sara = new Sara(this);
@@ -133,7 +134,7 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 		BorderLayout secondLine = new BorderLayout();
 		pnSecondLine = new JPanel();
 		pnSecondLine.setLayout(secondLine);
-		pnSecondLine.add(txtLog);
+		pnSecondLine.add(logScrollPane);
 
 		// Add to the main window
 		this.add(pnFirstLine);
