@@ -179,21 +179,18 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 	public void onHandShakeConfirmationRequested(EventObject sender, SaraEventArgs e)
 	{
 		saraLog.add("The handshake confirmation was requested by Sara Central");
-		sara.sendHandShakeConfirmation();
 	}
 
 	@Override
 	public void onThingIdRequested(EventObject sender, SaraEventArgs e)
 	{
 		saraLog.add("The Thing ID was requested by Sara Central");
-		sara.sendThingId();
 	}
 
 	@Override
 	public void onThingOperationsUrlRequested(EventObject sender, SaraEventArgs e)
 	{
 		saraLog.add("The Operations URL was requested by Sara Central");
-		sara.sendThingOperationsUrl();
 	}
 
 	@Override
@@ -205,8 +202,6 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 	@Override
 	public void onNewLogMessageAdded(EventObject sender, LogEventArgs e)
 	{
-		SaraLog saraLog = (SaraLog) sender;
-		txtLog.setText(saraLog.getLog());
-		txtLog.setCaretPosition(txtLog.getDocument().getLength());
+		txtLog.setText(((SaraLog) sender).getLog());
 	}
 }

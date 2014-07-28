@@ -17,6 +17,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import sara.api.communication.message.MessageHandShakeConfirmation;
 import sara.api.communication.message.MessageOperationsUrl;
+import sara.api.communication.message.MessageSignal;
 import sara.api.communication.message.MessageThingId;
 import sara.api.communication.message.SaraMessage;
 import sara.api.handler.LogEventArgs;
@@ -141,7 +142,7 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 				}
 
 				// Sleeping for a better synchronization
-				Thread.sleep(1000);
+				Thread.sleep(100);
 			}
 		}
 		catch (Exception ex)
@@ -194,7 +195,11 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 
 	public void sendSignal()
 	{
+		MqttMessage mqttMessage = new MqttMessage(("Detailed message").getBytes());
+		mqttMessage.setQos(2);
 
+		SaraMessage message = new MessageSignal("/sometopic/", mqttMessage);
+		messagesToSend.add(message);
 	}
 
 	public SaraLog getSaraLog()
