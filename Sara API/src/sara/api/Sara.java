@@ -224,12 +224,12 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 	}
 
 	// Public methods for event handle
-	public synchronized void addEventListener(ISaraEvent listener)
+	public synchronized void addSaraEventsListener(ISaraEvent listener)
 	{
 		eventListeners.add(listener);
 	}
 
-	public synchronized void removeEventListener(ISaraEvent listener)
+	public synchronized void removeSaraEventsListener(ISaraEvent listener)
 	{
 		eventListeners.remove(listener);
 	}

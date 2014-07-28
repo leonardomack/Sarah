@@ -1,4 +1,4 @@
-package sara.desktop.views;
+package sara.desktop.model;
 
 import java.util.EventObject;
 
@@ -13,7 +13,7 @@ public class Device implements ISaraEvent
 	public Device()
 	{
 		sara = new Sara(this);
-		sara.addEventListener(this);
+		sara.addSaraEventsListener(this);
 
 		sara.start();
 		sara.tryToFindSaraCentral();
