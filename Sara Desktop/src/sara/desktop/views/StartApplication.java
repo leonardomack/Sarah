@@ -2,6 +2,9 @@ package sara.desktop.views;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 
@@ -9,7 +12,7 @@ public class StartApplication
 {
 
 	public static void main(String[] args)
-	{	
+	{
 		MainWindow mainWindow = new MainWindow();
 
 		JFrame window = new JFrame();

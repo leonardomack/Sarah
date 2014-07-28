@@ -15,6 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import sara.api.communication.SaraCentralDiscover;
 import sara.api.communication.message.MessageHandShakeConfirmation;
 import sara.api.communication.message.MessageOperationsUrl;
 import sara.api.communication.message.MessageSignal;
@@ -172,7 +173,10 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 
 	public void tryToFindSaraCentral()
 	{
-		saraStatus = SaraStatus.FINDING_CENTRAL;
+		//Needs to make the ip research and send sara signal to accept
+		SaraCentralDiscover discover = new SaraCentralDiscover();
+		discover.discover();
+		//saraStatus = SaraStatus.FINDING_CENTRAL;
 	}
 
 	public void sendThingId()
