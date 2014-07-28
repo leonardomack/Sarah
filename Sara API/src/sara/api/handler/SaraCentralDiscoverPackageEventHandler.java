@@ -8,7 +8,7 @@ public class SaraCentralDiscoverPackageEventHandler implements ISaraCentralDisco
 {
 
 	@Override
-	public void onSaraCentralDiscoverPackageCentralFound(EventObject sender, SaraCentralDiscoverPackageEventArgs e)
+	public void onSaraCentralDiscoverPackageResult(EventObject sender, SaraCentralDiscoverPackageEventArgs e)
 	{
 		// TODO Auto-generated method stub
 

@@ -31,17 +31,23 @@ public class SaraCentralDiscoverPackage extends EventObject implements Runnable
 	{
 		try
 		{
-			if (InetAddress.getByName(ipToDiscover).isReachable(10000))
+			if (InetAddress.getByName(ipToDiscover).isReachable(5000))
 			{
 				// Ip ok
-				onCentralFoundEventHandler(new SaraCentralDiscoverPackageEventArgs("IP found " + ipToDiscover));
+				onSaraCentralDiscoverPackageResultEventHandler(new SaraCentralDiscoverPackageEventArgs(ipToDiscover, true));
 			}
-
+			else
+			{
+				// Ip not ok
+				onSaraCentralDiscoverPackageResultEventHandler(new SaraCentralDiscoverPackageEventArgs(ipToDiscover, false));
+			}
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
+			// Ip not ok
+			onSaraCentralDiscoverPackageResultEventHandler(new SaraCentralDiscoverPackageEventArgs(ipToDiscover, false));
 		}
 
 	}
@@ -57,7 +63,17 @@ public class SaraCentralDiscoverPackage extends EventObject implements Runnable
 			thread.start();
 		}
 	}
-	
+
+	public String getThreadName()
+	{
+		return threadName;
+	}
+
+	public String getIpToDiscover()
+	{
+		return ipToDiscover;
+	}
+
 	public synchronized void addEventsListener(ISaraCentralDiscoverPackageEvent listener)
 	{
 		eventListeners.add(listener);
@@ -68,13 +84,13 @@ public class SaraCentralDiscoverPackage extends EventObject implements Runnable
 		eventListeners.remove(listener);
 	}
 
-	private synchronized void onCentralFoundEventHandler(SaraCentralDiscoverPackageEventArgs e)
+	private synchronized void onSaraCentralDiscoverPackageResultEventHandler(SaraCentralDiscoverPackageEventArgs e)
 	{
 		SaraCentralDiscoverPackage sender = new SaraCentralDiscoverPackage(this);
 		Iterator<ISaraCentralDiscoverPackageEvent> i = eventListeners.iterator();
 		while (i.hasNext())
 		{
-			((ISaraCentralDiscoverPackageEvent) i.next()).onSaraCentralDiscoverPackageCentralFound(sender, e);
+			((ISaraCentralDiscoverPackageEvent) i.next()).onSaraCentralDiscoverPackageResult(sender, e);
 		}
 	}
 }

@@ -173,10 +173,16 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 
 	public void tryToFindSaraCentral()
 	{
-		//Needs to make the ip research and send sara signal to accept
+		// Needs to make the ip research and send sara signal to accept
 		SaraCentralDiscover discover = new SaraCentralDiscover();
-		discover.discover();
-		//saraStatus = SaraStatus.FINDING_CENTRAL;
+		List<String> validIps = discover.discover();
+
+		for (String validIp : validIps)
+		{
+			// Log
+			log.add("Valid ip found: " + validIp);
+		}
+		// saraStatus = SaraStatus.FINDING_CENTRAL;
 	}
 
 	public void sendThingId()

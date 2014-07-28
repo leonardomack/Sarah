@@ -3,17 +3,24 @@ package sara.api.handler;
 public class SaraCentralDiscoverPackageEventArgs
 {
 	// Properties
-		private String args;
+	private String ip;
+	private Boolean isIpReachable;
 
-		// Constructors
-		public SaraCentralDiscoverPackageEventArgs(String args)
-		{
-			this.args = args;
-		}
+	// Constructors
+	public SaraCentralDiscoverPackageEventArgs(String ip, Boolean isIpReachable)
+	{
+		this.ip = ip;
+		this.isIpReachable = isIpReachable;
+	}
 
-		// Getters
-		public String getArgs()
-		{
-			return args;
-		}
+	// Getters
+	public String getIp()
+	{
+		return ip;
+	}
+
+	public Boolean getIsIpReachable()
+	{
+		return isIpReachable;
+	}
 }

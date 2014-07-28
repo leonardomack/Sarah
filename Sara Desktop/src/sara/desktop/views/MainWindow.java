@@ -1,6 +1,7 @@
 package sara.desktop.views;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -149,8 +150,12 @@ public class MainWindow extends JPanel implements ISaraEvent, ILogEvent
 	// Events methods
 	private void btnConnect_Clicked()
 	{
+		this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+
 		sara.start();
 		sara.tryToFindSaraCentral();
+
+		this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	private void btnSendHandShake_Clicked()

@@ -6,5 +6,5 @@ import sara.api.handler.SaraCentralDiscoverPackageEventArgs;
 
 public interface ISaraCentralDiscoverPackageEvent
 {
-	void onSaraCentralDiscoverPackageCentralFound(EventObject sender, SaraCentralDiscoverPackageEventArgs e);
+	void onSaraCentralDiscoverPackageResult(EventObject sender, SaraCentralDiscoverPackageEventArgs e);
 }
