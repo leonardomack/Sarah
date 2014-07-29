@@ -42,6 +42,7 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 	private List<SaraMessage> messagesToSend;
 	private String thingId;
 	private String operationsUrl;
+	List<String> validIps;
 
 	// Constructors
 	public Sara(Object sender)
@@ -67,8 +68,9 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 	@Override
 	public void run()
 	{
-		String topic = "MQTT Examples";
-		String serverBroker = "tcp://192.168.0.104:60001";
+		// IP Variables loop
+		String actualIpBroker = "";
+		int actualIpBrokerIndex = 0;
 
 		MemoryPersistence persistence = new MemoryPersistence();
 		MqttConnectOptions connectionOptions = new MqttConnectOptions();
@@ -77,51 +79,56 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 
 		try
 		{
-			MqttClient sampleClient = new MqttClient(serverBroker, thingId, persistence);
+			// Mqtt client
+			MqttClient sampleClient = null;
+
 			while (isRunning)
 			{
 
+				// Performing Sara actions
 				if (saraStatus.equals(SaraStatus.FINDING_CENTRAL))
 				{
-					// Setting configurations
-					sampleClient = new MqttClient(serverBroker, thingId, persistence);
+					// Try next ip
+					actualIpBroker = "tcp://" + validIps.get(actualIpBrokerIndex) + ":60001";
 
-					// Log
-					log.add("Try broker connection: " + serverBroker);
+					// Get next good index for ip's list
+					if ((validIps.size() - 1) == actualIpBrokerIndex)
+					{
+						actualIpBrokerIndex = 0;
+					}
+					else
+					{
+						actualIpBrokerIndex++;
+					}
+
+					// Setting configurations
+					sampleClient = new MqttClient(actualIpBroker, thingId, persistence);
 
 					try
 					{
+						// Log
+						log.add("Try broker connection at: " + actualIpBroker);
+
 						// Try to connect, if the server doesnt exists, it will
 						// generate a ConnectException
 						sampleClient.connect(connectionOptions);
 
-						// The server exists, register callback behavior
-						sampleClient.setCallback(this);
-
 						// Update internal status and run events
 						saraStatus = SaraStatus.CENTRAL_FOUND;
-						onCentralFoundEventHandler(new SaraEventArgs(""));
+
+						// Log
+						log.add("Connected at: " + actualIpBroker);
 					}
 					catch (Exception ex)
 					{
-						if (ex instanceof ConnectException)
+						if (ex instanceof ConnectException || ex instanceof MqttException)
 						{
 							// Server not found, try another one
-							// Log
-							log.add("Server not found, try another address");
-						}
-						else if (ex instanceof MqttException)
-						{
-							// Some another Mqtt exception
-							System.out.println("reason " + ((MqttException) ex).getReasonCode());
-							System.out.println("msg " + ex.getMessage());
-							System.out.println("loc " + ex.getLocalizedMessage());
-							System.out.println("cause " + ex.getCause());
-							System.out.println("excep " + ex);
+							// Main exception
 							ex.printStackTrace();
 
 							// Log
-							log.add("Sara connection is not working");
+							log.add("Server not found, try another address");
 						}
 						else
 						{
@@ -129,11 +136,24 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 							ex.printStackTrace();
 
 							// Log
-							log.add("Sara is not responding");
+							log.add("Sara connection is not working");
 						}
 					}
 				}
 				else if (saraStatus.equals(SaraStatus.CENTRAL_FOUND))
+				{
+					// The server exists, register callback behavior
+					sampleClient.setCallback(this);
+					onCentralFoundEventHandler(new SaraEventArgs(""));
+
+					// Update internal status and run events
+					saraStatus = SaraStatus.CONNECTED_AT_CENTRAL;
+
+					// Log
+					log.add("Sending and receiving behaviors completed");
+
+				}
+				else if (saraStatus.equals(SaraStatus.CONNECTED_AT_CENTRAL))
 				{
 					if (messagesToSend.size() > 0)
 					{
@@ -175,14 +195,25 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 	{
 		// Needs to make the ip research and send sara signal to accept
 		SaraCentralDiscover discover = new SaraCentralDiscover();
-		List<String> validIps = discover.discover();
+		this.validIps = discover.discover();
 
-		for (String validIp : validIps)
+		if (validIps.size() == 0)
 		{
+			// 0 ips found, so we have no central
 			// Log
-			log.add("Valid ip found: " + validIp);
+			log.add("Central not found");
+			return;
 		}
-		// saraStatus = SaraStatus.FINDING_CENTRAL;
+		else
+		{
+			for (String validIp : validIps)
+			{
+				// Log
+				log.add("Valid ip found: " + validIp);
+			}
+
+			saraStatus = SaraStatus.FINDING_CENTRAL;
+		}
 	}
 
 	public void sendThingId()
@@ -252,14 +283,16 @@ public class Sara extends EventObject implements Runnable, MqttCallback
 	@Override
 	public void connectionLost(Throwable cause)
 	{
-		// TODO Auto-generated method stub
+		// Update status
+		saraStatus = SaraStatus.OFFLINE;
 
+		// Log
+		log.add("Sara connection lost");
 	}
 
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken token)
 	{
-		// TODO Auto-generated method stub
 
 	}
 

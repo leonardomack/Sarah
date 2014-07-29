@@ -235,7 +235,7 @@ public class MqttClient implements IMqttClient { //), DestinationProvider {
 	 * @see IMqttClient#connect(MqttConnectOptions)
 	 */
 	public void connect(MqttConnectOptions options) throws MqttSecurityException, MqttException {
-		aClient.connect(options, null, null).waitForCompletion(getTimeToWait());
+		aClient.connect(options, null, null).waitForCompletion(1000);//getTimeToWait());
 	}
 	
 	/*
