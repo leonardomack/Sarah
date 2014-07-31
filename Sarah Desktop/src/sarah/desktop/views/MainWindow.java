@@ -24,7 +24,7 @@ import sarah.api.handler.SarahEventArgs;
 import sarah.api.interfaces.ILogEvent;
 import sarah.api.interfaces.ISarahEvent;
 import sarah.api.tools.SarahLog;
-import sarah.api.tools.SmartScroller;
+import sarah.desktop.tools.SmartScroller;
 
 public class MainWindow extends JPanel implements ISarahEvent, ILogEvent
 {
