@@ -212,6 +212,9 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 				log.add("Valid ip found: " + validIp);
 			}
 
+			// TODO: Just adding server ip hardcode (REMOVE)
+			validIps.clear();
+			validIps.add("192.168.0.104");
 			sarahStatus = SarahStatus.FINDING_CENTRAL;
 		}
 	}
