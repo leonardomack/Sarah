@@ -2,6 +2,8 @@ package sarah.api;
 
 import java.net.ConnectException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -50,6 +52,14 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 		// Call super constructor
 		super(sender);
 
+		// Generate device's name
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int hours = calendar.get(Calendar.HOUR_OF_DAY);
+		int minutes = calendar.get(Calendar.MINUTE);
+		int seconds = calendar.get(Calendar.SECOND);
+		String deviceName = "Device-" + hours + minutes + seconds;
+
 		// New instances and default values
 		log = new SarahLog(this);
 		eventListeners = new ArrayList<ISarahEvent>();
@@ -57,7 +67,7 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 		isRunning = false;
 		threadName = SarahConstants.THREAD_SARA_NAME;
 		messagesToSend = new LinkedList<SarahMessage>();
-		thingId = "Device01";
+		thingId = deviceName;
 		operationsUrl = "http://sara.com";
 
 		// Log
@@ -194,8 +204,13 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 	public void tryToFindSaraCentral()
 	{
 		// Needs to make the ip research and send sara signal to accept
-		SarahCentralDiscover discover = new SarahCentralDiscover();
-		this.validIps = discover.discover();
+		// SarahCentralDiscover discover = new SarahCentralDiscover();
+		// this.validIps = discover.discover();
+
+		// TODO: Just adding server ip hardcode (REMOVE)
+		validIps = new ArrayList<String>();
+		validIps.clear();
+		validIps.add("192.168.0.104");
 
 		if (validIps.size() == 0)
 		{
@@ -212,9 +227,6 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 				log.add("Valid ip found: " + validIp);
 			}
 
-			// TODO: Just adding server ip hardcode (REMOVE)
-			validIps.clear();
-			validIps.add("192.168.0.104");
 			sarahStatus = SarahStatus.FINDING_CENTRAL;
 		}
 	}
@@ -249,6 +261,11 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 	public SarahLog getSaraLog()
 	{
 		return this.log;
+	}
+
+	public Boolean getIsRunning()
+	{
+		return isRunning;
 	}
 
 	/*

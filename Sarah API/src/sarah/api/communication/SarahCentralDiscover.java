@@ -38,7 +38,7 @@ public class SarahCentralDiscover implements ISarahCentralDiscoverPackageEvent
 		// Wait while clients needs to answer
 		try
 		{
-			Thread.sleep(10000);
+			Thread.sleep(7000);
 		}
 		catch (InterruptedException e)
 		{
@@ -54,6 +54,6 @@ public class SarahCentralDiscover implements ISarahCentralDiscoverPackageEvent
 		if (e.getIsIpReachable())
 		{
 			validIpClients.add(e.getIp());
-		}		
+		}
 	}
 }
