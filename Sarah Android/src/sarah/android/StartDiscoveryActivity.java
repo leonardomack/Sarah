@@ -147,7 +147,7 @@ public class StartDiscoveryActivity extends ActionBarActivity implements OnClick
 			String deviceName = "Device-" + hours + minutes + seconds;
 
 			// Connection info
-			String server = "192.168.0.104";
+			String server = "192.168.0.102";
 			String clientId = deviceName;
 			int port = 60001;
 			boolean cleanSession = false;
@@ -173,7 +173,7 @@ public class StartDiscoveryActivity extends ActionBarActivity implements OnClick
 
 			// last will message
 			String message = "message test";
-			String topic = "/sara/topictest";
+			String topic = "/sarah/topictest";
 			Integer qos = 2;
 			Boolean retained = false;
 
@@ -249,7 +249,7 @@ public class StartDiscoveryActivity extends ActionBarActivity implements OnClick
 			MqttAndroidClient client = connection.getClient();
 			try
 			{
-				client.publish("/sara/handshake/", message);
+				client.publish("/sarah/handshake/", message);
 			}
 			catch (MqttPersistenceException e)
 			{
@@ -265,12 +265,12 @@ public class StartDiscoveryActivity extends ActionBarActivity implements OnClick
 		}
 		case R.id.btnSendUrl:
 		{
-			MqttMessage message = new MqttMessage(("http://app.com").getBytes());
+			MqttMessage message = new MqttMessage(("http://xpper.com/download/sarah/MobileDevice01.json").getBytes());
 
 			MqttAndroidClient client = connection.getClient();
 			try
 			{
-				client.publish("/sara/url/", message);
+				client.publish("/sarah/url/", message);
 			}
 			catch (MqttPersistenceException e)
 			{

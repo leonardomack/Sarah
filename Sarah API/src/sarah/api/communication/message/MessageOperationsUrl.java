@@ -12,7 +12,7 @@ public class MessageOperationsUrl extends SarahMessage
 		MqttMessage message = new MqttMessage(operationsUrl.getBytes());
 		message.setQos(2);
 
-		super.setTopic(SarahConstants.SARA_URL_TOPIC);
+		super.setTopic(SarahConstants.SARAH_URL_TOPIC);
 		super.setMqttMessage(message);
 	}
 }

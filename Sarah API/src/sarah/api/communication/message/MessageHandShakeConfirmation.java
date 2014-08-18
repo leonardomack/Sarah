@@ -11,7 +11,7 @@ public class MessageHandShakeConfirmation extends SarahMessage
 		MqttMessage message = new MqttMessage(("confirmed").getBytes());
 		message.setQos(2);
 
-		super.setTopic(SarahConstants.SARA_HANDSHAKE_TOPIC);
+		super.setTopic(SarahConstants.SARAH_HANDSHAKE_TOPIC);
 		super.setMqttMessage(message);		
 	}
 }

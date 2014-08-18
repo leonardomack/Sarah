@@ -11,7 +11,7 @@ public class MessageThingId extends SarahMessage
 		MqttMessage message = new MqttMessage(thingId.getBytes());
 		message.setQos(2);
 
-		super.setTopic(SarahConstants.SARA_ROOT_TOPIC);
+		super.setTopic(SarahConstants.SARAH_ROOT_TOPIC);
 		super.setMqttMessage(message);
 	}
 

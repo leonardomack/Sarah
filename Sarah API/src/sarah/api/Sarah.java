@@ -65,10 +65,10 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 		eventListeners = new ArrayList<ISarahEvent>();
 		sarahStatus = SarahStatus.OFFLINE;
 		isRunning = false;
-		threadName = SarahConstants.THREAD_SARA_NAME;
+		threadName = SarahConstants.THREAD_SARAH_NAME;
 		messagesToSend = new LinkedList<SarahMessage>();
 		thingId = deviceName;
-		operationsUrl = "http://sara.com";
+		operationsUrl = "http://xpper.com/download/sarah/DesktopDevice01.json";
 
 		// Log
 		log.add("Sara created");
@@ -210,7 +210,7 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 		// TODO: Just adding server ip hardcode (REMOVE)
 		validIps = new ArrayList<String>();
 		validIps.clear();
-		validIps.add("192.168.0.104");
+		validIps.add("192.168.0.102");
 
 		if (validIps.size() == 0)
 		{
@@ -275,7 +275,7 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 	public void messageArrived(String topic, MqttMessage message) throws Exception
 	{
 		// Check if it's sara commands
-		if (topic.equals(SarahConstants.SARA_HANDSHAKE_TOPIC))
+		if (topic.equals(SarahConstants.SARAH_HANDSHAKE_TOPIC))
 		{
 			// HandShake requested
 
@@ -286,7 +286,7 @@ public class Sarah extends EventObject implements Runnable, MqttCallback
 			}
 
 		}
-		else if (topic.equals(SarahConstants.SARA_URL_TOPIC))
+		else if (topic.equals(SarahConstants.SARAH_URL_TOPIC))
 		{
 			// URL requested
 			if (message.toString().equals(SarahConstants.REQUEST_DEFAULT_MESSAGE))
