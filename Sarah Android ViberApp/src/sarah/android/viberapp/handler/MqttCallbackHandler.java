@@ -151,12 +151,12 @@ public class MqttCallbackHandler implements MqttCallback
 		else
 		{
 			// other message type, general business logic type
-			if (topic.equals("/state/viber/"))
+			if (topic.equals("/viber/"))
 			{
 				Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(1500);
 			}
-			else if (topic.equals("/state/ring/"))
+			else if (topic.equals("/ring/"))
 			{
 				try
 				{
