@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -246,84 +248,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		{
 			// Leaving
 			finish();
-		}
-	}
-
-	class RetrieveFeedTask extends AsyncTask<String, Void, Void>
-	{
-		public String s_dns1;
-		public String s_dns2;
-		public String s_gateway;
-		public String s_ipAddress;
-		public String s_leaseDuration;
-		public String s_netmask;
-		public String s_serverAddress;
-		TextView info;
-		DhcpInfo d;
-		WifiManager wifii;
-
-		protected Void doInBackground(String... urls)
-		{
-			try
-			{
-				wifii = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-				d = wifii.getDhcpInfo();
-
-				s_dns1 = "DNS 1: " + String.valueOf(d.dns1);
-				s_dns2 = "DNS 2: " + String.valueOf(d.dns2);
-				s_gateway = "Default Gateway: " + String.valueOf(d.gateway);
-				s_ipAddress = "IP Address: " + String.valueOf(d.ipAddress);
-				s_leaseDuration = "Lease Time: " + String.valueOf(d.leaseDuration);
-				s_netmask = "Subnet Mask: " + String.valueOf(d.netmask);
-				s_serverAddress = "Server IP: " + String.valueOf(d.serverAddress);
-
-				String connections = "";
-				InetAddress host;
-				try
-				{
-					int ipAddress = d.dns1;
-					byte[] bytes = BigInteger.valueOf(ipAddress).toByteArray();
-
-					host = InetAddress.getByAddress(bytes);
-					byte[] ip = host.getAddress();
-
-					for (int i = 1; i <= 254; i++)
-					{
-						ip[3] = (byte) i;
-						InetAddress address = InetAddress.getByAddress(ip);
-						if (address.isReachable(100))
-						{
-							System.out.println(address + " machine is turned on and can be pinged");
-							connections += address + "\n";
-						}
-						else if (!address.getHostAddress().equals(address.getHostName()))
-						{
-							System.out.println(address + " machine is known in a DNS lookup");
-						}
-
-					}
-				}
-				catch (UnknownHostException e1)
-				{
-					e1.printStackTrace();
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-				System.out.println(connections);
-			}
-			catch (Exception e)
-			{
-				return null;
-			}
-			return null;
-		}
-
-		protected void onPostExecute(Void feed)
-		{
-			// TODO: check this.exception
-			// TODO: do something with the feed
 		}
 	}
 
