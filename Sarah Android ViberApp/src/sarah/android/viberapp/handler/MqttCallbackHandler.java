@@ -101,7 +101,7 @@ public class MqttCallbackHandler implements MqttCallback
 			if (message.toString().equals("get"))
 			{
 				// notify the user
-				Notify.notifcation(context, "handshake", intent, R.string.notifyTitle);
+				//Notify.notifcation(context, "handshake", intent, R.string.notifyTitle);
 
 				MqttMessage messageHandshake = new MqttMessage(("confirmed").getBytes());
 
@@ -127,9 +127,9 @@ public class MqttCallbackHandler implements MqttCallback
 			if (message.toString().equals("get"))
 			{
 				// notify the user
-				Notify.notifcation(context, "url", intent, R.string.notifyTitle);
+				//Notify.notifcation(context, "url", intent, R.string.notifyTitle);
 
-				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/MobileDevice01.json").getBytes());
+				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json").getBytes());
 
 				MqttAndroidClient client = connection.getClient();
 				try
@@ -153,64 +153,14 @@ public class MqttCallbackHandler implements MqttCallback
 			// other message type, general business logic type
 			if (topic.equals("/viber/"))
 			{
-				Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
-				v.vibrate(1500);
+				viber();
 			}
 			else if (topic.equals("/ring/"))
 			{
-				try
-				{
-					Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-					Ringtone r = RingtoneManager.getRingtone(context, notification);
-					r.play();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
+				ring();
 			}
 
 		}
-
-		// // Get connection object associated with this object
-		// Connection c =
-		// Connections.getInstance(context).getConnection(clientHandle);
-		//
-		// // create arguments to format message arrived notifcation string
-		// String[] args = new String[2];
-		// args[0] = new String(message.getPayload());
-		// args[1] = topic;
-		//
-		// // get the string from strings.xml and format
-		// String messageString = context.getString(R.string.messageRecieved,
-		// (Object[]) args);
-		//
-		// // create intent to start activity
-		// Intent intent = new Intent();
-		// intent.setClassName(context,
-		// "org.eclipse.paho.android.service.sample.ConnectionDetails");
-		// intent.putExtra("handle", clientHandle);
-		//
-		// // format string args
-		// Object[] notifyArgs = new String[3];
-		// notifyArgs[0] = c.getId();
-		// notifyArgs[1] = new String(message.getPayload());
-		// notifyArgs[2] = topic;
-		//
-		// // notify the user
-		// Notify.notifcation(context, context.getString(R.string.notification,
-		// notifyArgs), intent, R.string.notifyTitle);
-		//
-		// // update client history
-		// c.addAction(messageString);
-		//
-		// if
-		// (messageString.equals("Received message get <br/> <small>Topic: /sara/url/ </small>"))
-		// {
-		// Vibrator v = (Vibrator)
-		// this.context.getSystemService(Context.VIBRATOR_SERVICE);
-		// v.vibrate(1500);
-		// }
 	}
 
 	/**
@@ -220,6 +170,62 @@ public class MqttCallbackHandler implements MqttCallback
 	public void deliveryComplete(IMqttDeliveryToken token)
 	{
 		// Do nothing
+	}
+
+	private void viber()
+	{
+		// // Get connection object associated with this object
+		Connection connection = Connections.getInstance(context).getConnection(clientHandle);
+
+		MqttAndroidClient client = connection.getClient();
+		try
+		{
+			MqttMessage message = new MqttMessage(("").getBytes());
+			client.publish("/viber-called/", message);
+		}
+		catch (MqttPersistenceException e)
+		{
+
+		}
+		catch (MqttException e)
+		{
+
+		}
+
+		Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(1500);
+	}
+
+	private void ring()
+	{
+		// // Get connection object associated with this object
+		Connection connection = Connections.getInstance(context).getConnection(clientHandle);
+
+		MqttAndroidClient client = connection.getClient();
+		try
+		{
+			MqttMessage message = new MqttMessage(("").getBytes());
+			client.publish("/ring-called/", message);
+		}
+		catch (MqttPersistenceException e)
+		{
+
+		}
+		catch (MqttException e)
+		{
+
+		}
+
+		try
+		{
+			Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+			Ringtone r = RingtoneManager.getRingtone(context, notification);
+			r.play();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 }

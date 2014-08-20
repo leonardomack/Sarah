@@ -8,10 +8,5 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="sarah.android.viberapp.MainActivity" >
 
-    <Button
-        android:id="@+id/btnConnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mqtt_connect" />
 
 </RelativeLayout>

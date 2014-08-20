@@ -5,7 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="activity_main_exit_text">Press back again to leave</string>
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="title_activity_splash_screen">Sarah Android App</string>
     <string name="mqtt_connect">Connect</string>
 
     <!-- Base -->

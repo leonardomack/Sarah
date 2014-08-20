@@ -16,6 +16,6 @@
         android:layout_centerVertical="true"
         android:contentDescription="@string/title_activity_splash_screen"
         android:scaleType="fitXY"
-        android:src="@drawable/java" />
+        android:src="@drawable/sarah_splash" />
 
 </RelativeLayout>

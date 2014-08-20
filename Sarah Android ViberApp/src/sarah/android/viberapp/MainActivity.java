@@ -39,8 +39,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener
+public class MainActivity extends ActionBarActivity
 {
+	//private static final String SARAH_SERVER_IP = "173.176.42.176";
+	private static final String SARAH_SERVER_IP = "192.168.0.102";
+
 	private Integer exitPressCounter;
 	private MainActivity clientConnections;
 	private Connection connection;
@@ -83,141 +86,112 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		exitPressCounter = 0;
 		clientConnections = this;
 
-		// Default behaviors
-		Button btnConnect = (Button) findViewById(R.id.btnConnect);
-		// Button btnSendHandshake = (Button)
-		// findViewById(R.id.btnSendHandshake);
-		// Button btnSendUrl = (Button) findViewById(R.id.btnSendUrl);
-		// Button btnSendSignal = (Button) findViewById(R.id.btnSendSignal);
-		//
-		btnConnect.setOnClickListener(this);
-		// btnSendHandshake.setOnClickListener(this);
-		// btnSendUrl.setOnClickListener(this);
-		// btnSendSignal.setOnClickListener(this);
+		startSarahCommunication();
 	}
 
-	// Implement the OnClickListener callback
-	public void onClick(View v)
+	private void startSarahCommunication()
 	{
-		// Try to discover some IPs
-		// new RetrieveFeedTask().execute("");
+		// The basic client information
+		// Generate device's name
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		int hours = calendar.get(Calendar.HOUR_OF_DAY);
+		int minutes = calendar.get(Calendar.MINUTE);
+		int seconds = calendar.get(Calendar.SECOND);
+		String deviceName = "Device-" + hours + minutes + seconds;
 
-		Button clickedButton = (Button) v;
+		// Connection info
+		String server = SARAH_SERVER_IP;
+		String clientId = deviceName;
+		int port = 60001;
+		boolean cleanSession = false;
+		boolean isSsl = false;
+		String uri = null;
 
-		switch (clickedButton.getId())
+		if (isSsl)
 		{
-		case R.id.btnConnect:
-		{
+			Log.e("SSLConnection", "Doing an SSL Connect");
+			uri = "ssl://";
 
-			// The basic client information
-			// Generate device's name
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(new Date());
-			int hours = calendar.get(Calendar.HOUR_OF_DAY);
-			int minutes = calendar.get(Calendar.MINUTE);
-			int seconds = calendar.get(Calendar.SECOND);
-			String deviceName = "Device-" + hours + minutes + seconds;
-
-			// Connection info
-			String server = "192.168.0.102";
-			String clientId = deviceName;
-			int port = 60001;
-			boolean cleanSession = false;
-			boolean isSsl = false;
-			String uri = null;
-
-			if (isSsl)
-			{
-				Log.e("SSLConnection", "Doing an SSL Connect");
-				uri = "ssl://";
-
-			}
-			else
-			{
-				uri = "tcp://";
-			}
-
-			uri = uri + server + ":" + port;
-
-			MqttAndroidClient client = new MqttAndroidClient(this, uri, clientId);
-			// create a client handle
-			String clientHandle = uri + clientId;
-
-			// last will message
-			String message = "message test";
-			String topic = "/sarah/topictest";
-			Integer qos = 2;
-			Boolean retained = false;
-
-			// connection options
-			String username = "";
-			String password = "";
-			int timeout = 1000;
-			int keepalive = 10;
-
-			MqttConnectOptions conOpt = new MqttConnectOptions();
-			conOpt.setCleanSession(cleanSession);
-			conOpt.setConnectionTimeout(timeout);
-			conOpt.setKeepAliveInterval(keepalive);
-			if (!username.equals(""))
-			{
-				conOpt.setUserName(username);
-			}
-			if (!password.equals(""))
-			{
-				conOpt.setPassword(password.toCharArray());
-			}
-
-			// arrayAdapter.add(connection);
-			ChangeListener changeListener = new ChangeListener();
-
-			connection = new Connection(clientHandle, clientId, server, port, this, client, isSsl);
-			connection.registerChangeListener(changeListener);
-			// connect client
-
-			String[] actionArgs = new String[1];
-			actionArgs[0] = clientId;
-			connection.changeConnectionStatus(ConnectionStatus.CONNECTING);
-
-			final ActionListener callback = new ActionListener(this, ActionListener.Action.CONNECT, clientHandle, actionArgs);
-
-			boolean doConnect = true;
-
-			if ((!message.equals(ActivityConstants.empty)) || (!topic.equals(ActivityConstants.empty)))
-			{
-				// need to make a message since last will is set
-				try
-				{
-					conOpt.setWill(topic, message.getBytes(), qos.intValue(), retained.booleanValue());
-				}
-				catch (Exception e)
-				{
-					Log.e(this.getClass().getCanonicalName(), "Exception Occured", e);
-					doConnect = false;
-					callback.onFailure(null, e);
-				}
-			}
-			client.setCallback(new MqttCallbackHandler(this, clientHandle));
-			connection.addConnectionOptions(conOpt);
-			Connections.getInstance(this).addConnection(connection);
-			if (doConnect)
-			{
-				try
-				{
-					client.connect(conOpt, null, callback);
-				}
-				catch (MqttException e)
-				{
-					Log.e(this.getClass().getCanonicalName(), "MqttException Occured", e);
-				}
-			}
-
-			break;
 		}
-		default:
+		else
 		{
-			break;
+			uri = "tcp://";
 		}
+
+		uri = uri + server + ":" + port;
+
+		MqttAndroidClient client = new MqttAndroidClient(this, uri, clientId);
+		// create a client handle
+		String clientHandle = uri + clientId;
+
+		// last will message
+		String message = "message test";
+		String topic = "/sarah/topictest";
+		Integer qos = 2;
+		Boolean retained = false;
+
+		// connection options
+		String username = "";
+		String password = "";
+		int timeout = 1000;
+		int keepalive = 10;
+
+		MqttConnectOptions conOpt = new MqttConnectOptions();
+		conOpt.setCleanSession(cleanSession);
+		conOpt.setConnectionTimeout(timeout);
+		conOpt.setKeepAliveInterval(keepalive);
+		if (!username.equals(""))
+		{
+			conOpt.setUserName(username);
+		}
+		if (!password.equals(""))
+		{
+			conOpt.setPassword(password.toCharArray());
+		}
+
+		// arrayAdapter.add(connection);
+		ChangeListener changeListener = new ChangeListener();
+
+		connection = new Connection(clientHandle, clientId, server, port, this, client, isSsl);
+		connection.registerChangeListener(changeListener);
+		// connect client
+
+		String[] actionArgs = new String[1];
+		actionArgs[0] = clientId;
+		connection.changeConnectionStatus(ConnectionStatus.CONNECTING);
+
+		final ActionListener callback = new ActionListener(this, ActionListener.Action.CONNECT, clientHandle, actionArgs);
+
+		boolean doConnect = true;
+
+		if ((!message.equals(ActivityConstants.empty)) || (!topic.equals(ActivityConstants.empty)))
+		{
+			// need to make a message since last will is set
+			try
+			{
+				conOpt.setWill(topic, message.getBytes(), qos.intValue(), retained.booleanValue());
+			}
+			catch (Exception e)
+			{
+				Log.e(this.getClass().getCanonicalName(), "Exception Occured", e);
+				doConnect = false;
+				callback.onFailure(null, e);
+			}
+		}
+		client.setCallback(new MqttCallbackHandler(this, clientHandle));
+		connection.addConnectionOptions(conOpt);
+		Connections.getInstance(this).addConnection(connection);
+		if (doConnect)
+		{
+			try
+			{
+				client.connect(conOpt, null, callback);
+			}
+			catch (MqttException e)
+			{
+				Log.e(this.getClass().getCanonicalName(), "MqttException Occured", e);
+			}
 		}
 
 	}
