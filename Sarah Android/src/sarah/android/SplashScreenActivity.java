@@ -17,8 +17,7 @@ public class SplashScreenActivity extends ActionBarActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		// Cacher la ActionBar et faire la reference a l'actionbar correcte
+		
 		// Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Remove notification bar

@@ -18,17 +18,16 @@ public class SplashScreenActivity extends ActionBarActivity
 	{
 		super.onCreate(savedInstanceState);
 
-		// Cacher la ActionBar et faire la reference a l'actionbar correcte
 		// Remove title bar
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		// Remove notification bar
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		// set content view AFTER ABOVE sequence (to avoid crash)
 		this.setContentView(R.layout.activity_splash_screen);
 
-		Handler handlerNewPage = new Handler();
-		handlerNewPage.postDelayed(new Runnable()
+		new Handler().postDelayed(new Runnable()
 		{
 			@Override
 			public void run()
@@ -38,7 +37,7 @@ public class SplashScreenActivity extends ActionBarActivity
 					Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
 					SplashScreenActivity.this.startActivity(intent);
 				}
-				finish();
+				SplashScreenActivity.this.finish();
 			}
 
 		}, 1000);// The waiting time in miliseconds

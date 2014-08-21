@@ -41,7 +41,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity
 {
-	//private static final String SARAH_SERVER_IP = "173.176.42.176";
+	// private static final String SARAH_SERVER_IP = "173.176.42.176";
 	private static final String SARAH_SERVER_IP = "192.168.0.102";
 
 	private Integer exitPressCounter;
@@ -86,7 +86,28 @@ public class MainActivity extends ActionBarActivity
 		exitPressCounter = 0;
 		clientConnections = this;
 
-		startSarahCommunication();
+		new Thread(new Runnable()
+		{
+			public void run()
+			{
+				startSarahCommunication();
+
+				while (connection.isConnectedOrConnecting() == false)
+				{
+					try
+					{
+						Thread.sleep(1000);
+						startSarahCommunication();
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+
 	}
 
 	private void startSarahCommunication()
@@ -98,7 +119,7 @@ public class MainActivity extends ActionBarActivity
 		int hours = calendar.get(Calendar.HOUR_OF_DAY);
 		int minutes = calendar.get(Calendar.MINUTE);
 		int seconds = calendar.get(Calendar.SECOND);
-		String deviceName = "Device-" + hours + minutes + seconds;
+		String deviceName = "Android-" + hours + minutes + seconds;
 
 		// Connection info
 		String server = SARAH_SERVER_IP;
