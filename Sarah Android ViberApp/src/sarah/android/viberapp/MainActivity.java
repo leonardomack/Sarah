@@ -2,20 +2,12 @@ package sarah.android.viberapp;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
 import sarah.android.viberapp.handler.MqttCallbackHandler;
 import sarah.android.viberapp.model.ActionListener;
@@ -23,11 +15,8 @@ import sarah.android.viberapp.model.Connection;
 import sarah.android.viberapp.model.Connection.ConnectionStatus;
 import sarah.android.viberapp.model.Connections;
 import sarah.android.viberapp.tools.ActivityConstants;
+import sarah.android.viberapp.util.Orientation;
 import android.support.v7.app.ActionBarActivity;
-import android.content.Context;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -36,10 +25,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends ActionBarActivity implements OnClickListener
 {
 	// private static final String SARAH_SERVER_IP = "173.176.42.176";
 	private static final String SARAH_SERVER_IP = "192.168.0.102";
@@ -47,6 +35,10 @@ public class MainActivity extends ActionBarActivity
 	private Integer exitPressCounter;
 	private MainActivity clientConnections;
 	private Connection connection;
+
+	// Mqtt utilities
+	private MqttAndroidClient mqttAndroidClient;
+	private MqttCallbackHandler mqttCallbackHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +78,18 @@ public class MainActivity extends ActionBarActivity
 		exitPressCounter = 0;
 		clientConnections = this;
 
+		// Lock orientation
+		Orientation.lockOrientationPortrait(this);
+
+		// Default behaviors
+		Button btnViber = (Button) findViewById(R.id.activity_main_btnViber);
+		Button btnRing = (Button) findViewById(R.id.activity_main_btnRing);
+		Button btnShowTime = (Button) findViewById(R.id.activity_main_btnTime);
+
+		btnViber.setOnClickListener(this);
+		btnRing.setOnClickListener(this);
+		btnShowTime.setOnClickListener(this);
+
 		new Thread(new Runnable()
 		{
 			public void run()
@@ -105,9 +109,9 @@ public class MainActivity extends ActionBarActivity
 						e.printStackTrace();
 					}
 				}
+
 			}
 		}).start();
-
 	}
 
 	private void startSarahCommunication()
@@ -142,7 +146,7 @@ public class MainActivity extends ActionBarActivity
 
 		uri = uri + server + ":" + port;
 
-		MqttAndroidClient client = new MqttAndroidClient(this, uri, clientId);
+		mqttAndroidClient = new MqttAndroidClient(this, uri, clientId);
 		// create a client handle
 		String clientHandle = uri + clientId;
 
@@ -174,7 +178,7 @@ public class MainActivity extends ActionBarActivity
 		// arrayAdapter.add(connection);
 		ChangeListener changeListener = new ChangeListener();
 
-		connection = new Connection(clientHandle, clientId, server, port, this, client, isSsl);
+		connection = new Connection(clientHandle, clientId, server, port, this, mqttAndroidClient, isSsl);
 		connection.registerChangeListener(changeListener);
 		// connect client
 
@@ -200,14 +204,17 @@ public class MainActivity extends ActionBarActivity
 				callback.onFailure(null, e);
 			}
 		}
-		client.setCallback(new MqttCallbackHandler(this, clientHandle));
+
+		mqttCallbackHandler = new MqttCallbackHandler(this, clientHandle);
+
+		mqttAndroidClient.setCallback(mqttCallbackHandler);
 		connection.addConnectionOptions(conOpt);
 		Connections.getInstance(this).addConnection(connection);
 		if (doConnect)
 		{
 			try
 			{
-				client.connect(conOpt, null, callback);
+				mqttAndroidClient.connect(conOpt, null, callback);
 			}
 			catch (MqttException e)
 			{
@@ -215,6 +222,58 @@ public class MainActivity extends ActionBarActivity
 			}
 		}
 
+	}
+
+	@Override
+	public void onClick(View v)
+	{
+		Button clickedButton = (Button) v;
+
+		// If the connection is not set, then return
+		if (connection == null || mqttAndroidClient == null || mqttCallbackHandler == null)
+		{
+			return;
+		}
+
+		// The connection is OK
+		switch (clickedButton.getId())
+		{
+		case R.id.activity_main_btnViber:
+		{
+			viberDevice();
+			break;
+		}
+		case R.id.activity_main_btnRing:
+		{
+			ringDevice();
+			break;
+		}
+		case R.id.activity_main_btnTime:
+		{
+			changeTimeDevice();
+			break;
+		}
+		default:
+		{
+			break;
+		}
+		}
+
+	}
+
+	private void viberDevice()
+	{
+		mqttCallbackHandler.viber();
+	}
+
+	private void ringDevice()
+	{
+		mqttCallbackHandler.ring();
+	}
+
+	private void changeTimeDevice()
+	{
+		mqttCallbackHandler.showTime();
 	}
 
 	@Override
@@ -274,4 +333,5 @@ public class MainActivity extends ActionBarActivity
 		}
 
 	}
+
 }

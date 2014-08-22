@@ -8,6 +8,11 @@
     <string name="title_activity_splash_screen">Sarah</string>
     <string name="mqtt_connect">Connect</string>
 
+    <!-- Activity_main -->
+    <string name="activity_main_btnViber_text">Viber</string>
+    <string name="activity_main_btnRing_text">Ring</string>
+    <string name="activity_main_btnTime_text">Show time</string>
+
     <!-- Base -->
     <string name="title_activity_sarah_status">SarahStatus</string>
     <string name="menu_settings">Settings</string>

@@ -1,5 +1,8 @@
 package sarah.android.viberapp.handler;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -101,7 +104,8 @@ public class MqttCallbackHandler implements MqttCallback
 			if (message.toString().equals("get"))
 			{
 				// notify the user
-				//Notify.notifcation(context, "handshake", intent, R.string.notifyTitle);
+				// Notify.notifcation(context, "handshake", intent,
+				// R.string.notifyTitle);
 
 				MqttMessage messageHandshake = new MqttMessage(("confirmed").getBytes());
 
@@ -127,7 +131,8 @@ public class MqttCallbackHandler implements MqttCallback
 			if (message.toString().equals("get"))
 			{
 				// notify the user
-				//Notify.notifcation(context, "url", intent, R.string.notifyTitle);
+				// Notify.notifcation(context, "url", intent,
+				// R.string.notifyTitle);
 
 				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json").getBytes());
 
@@ -159,6 +164,10 @@ public class MqttCallbackHandler implements MqttCallback
 			{
 				ring();
 			}
+			else if (topic.equals("/show-time/"))
+			{
+				showTime();
+			}
 
 		}
 	}
@@ -172,7 +181,7 @@ public class MqttCallbackHandler implements MqttCallback
 		// Do nothing
 	}
 
-	private void viber()
+	public void viber()
 	{
 		// // Get connection object associated with this object
 		Connection connection = Connections.getInstance(context).getConnection(clientHandle);
@@ -196,7 +205,7 @@ public class MqttCallbackHandler implements MqttCallback
 		v.vibrate(1500);
 	}
 
-	private void ring()
+	public void ring()
 	{
 		// // Get connection object associated with this object
 		Connection connection = Connections.getInstance(context).getConnection(clientHandle);
@@ -228,4 +237,29 @@ public class MqttCallbackHandler implements MqttCallback
 		}
 	}
 
+	public void showTime()
+	{
+		// // Get connection object associated with this object
+		Connection connection = Connections.getInstance(context).getConnection(clientHandle);
+
+		MqttAndroidClient client = connection.getClient();
+		try
+		{
+			MqttMessage message = new MqttMessage(("").getBytes());
+			client.publish("/change-time-called/", message);
+		}
+		catch (MqttPersistenceException e)
+		{
+
+		}
+		catch (MqttException e)
+		{
+
+		}
+
+		// Updating time
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());	
+		Toast.makeText(context, calendar.getTime().toString(), Toast.LENGTH_SHORT).show();
+	}
 }

@@ -1,5 +1,6 @@
 package sarah.android.viberapp;
 
+import sarah.android.viberapp.util.Orientation;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +28,9 @@ public class SplashScreenActivity extends ActionBarActivity
 		// set content view AFTER ABOVE sequence (to avoid crash)
 		this.setContentView(R.layout.activity_splash_screen);
 
+		//Lock orientation
+		Orientation.lockOrientationPortrait(this);
+		
 		new Handler().postDelayed(new Runnable()
 		{
 			@Override
