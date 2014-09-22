@@ -17,6 +17,7 @@ import sarah.android.viberapp.model.Connections;
 import sarah.android.viberapp.tools.ActivityConstants;
 import sarah.android.viberapp.util.Orientation;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -123,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener
 		int hours = calendar.get(Calendar.HOUR_OF_DAY);
 		int minutes = calendar.get(Calendar.MINUTE);
 		int seconds = calendar.get(Calendar.SECOND);
-		String deviceName = "Android-" + hours + minutes + seconds;
+		String deviceName = "Android-" + Build.MODEL + "-" + hours + minutes + seconds;
 
 		// Connection info
 		String server = SARAH_SERVER_IP;
