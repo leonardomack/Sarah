@@ -60,3 +60,6 @@ appcompat_v7/gen/android/support/v7/appcompat/R.java
 Sarah Android/gen/android/support/v7/appcompat/R.java
 Sarah Android/gen/sarah/android/BuildConfig.java
 Sarah Android/gen/sarah/android/R.java
+
+# Add Android jar support
+!appcompat_v7/libs/*
