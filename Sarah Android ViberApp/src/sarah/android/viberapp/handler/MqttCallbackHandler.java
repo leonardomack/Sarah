@@ -134,8 +134,8 @@ public class MqttCallbackHandler implements MqttCallback
 				// Notify.notifcation(context, "url", intent,
 				// R.string.notifyTitle);
 
-				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json").getBytes());
-
+//				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json").getBytes());
+				MqttMessage messageHandshake = new MqttMessage(("C:/central/DeviceDemonstracaoAndroidCelular.json").getBytes());
 				MqttAndroidClient client = connection.getClient();
 				try
 				{

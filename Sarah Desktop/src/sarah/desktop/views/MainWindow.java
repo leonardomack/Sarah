@@ -57,7 +57,7 @@ public class MainWindow extends JPanel implements ISarahEvent, ILogEvent
 	private void loadInstances()
 	{
 		// Window object controls
-		txtBrokerAddress = new JTextField("192.168.0.104");
+		txtBrokerAddress = new JTextField("192.168.173.253");
 		btnConnect = new JButton("Connect to broker");
 		btnSendHandShake = new JButton("Send handshake");
 		btnSendUrl = new JButton("Send url");
