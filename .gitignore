@@ -63,3 +63,4 @@ Sarah Android/gen/sarah/android/R.java
 
 # Add Android jar support
 !appcompat_v7/libs/*
+!Sarah Dependency/jar/*
