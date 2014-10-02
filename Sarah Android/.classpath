@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.eclipse.paho.client.mqttv3"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.eclipse.paho.android.service"/>
+	<classpathentry exported="true" kind="lib" path="/Sarah Dependency/jar/org.eclipse.paho.android.mqttv3.jar"/>
+	<classpathentry exported="true" kind="lib" path="/Sarah Dependency/jar/org.eclipse.paho.android.service.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
