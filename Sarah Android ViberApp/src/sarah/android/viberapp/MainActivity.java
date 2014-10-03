@@ -30,10 +30,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener
 {
-	private static final String SARAH_SERVER_IP = "192.168.173.1";
-	//private static final String SARAH_SERVER_IP = "192.168.25.4";
-	//private static final String SARAH_SERVER_IP = "192.168.173.253";
-	// private static final String SARAH_SERVER_IP = "192.168.0.102";
+	private static final String SARAH_SERVER_IP = "10.0.0.103";
 
 	private Integer exitPressCounter;
 	private MainActivity clientConnections;

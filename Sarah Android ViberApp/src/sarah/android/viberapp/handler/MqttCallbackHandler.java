@@ -37,6 +37,10 @@ public class MqttCallbackHandler implements MqttCallback
 	 **/
 	private String clientHandle;
 
+	// From website
+	// "http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json"
+	private static final String DEVICE_URL = "http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json";
+
 	/**
 	 * Creates an <code>MqttCallbackHandler</code> object
 	 * 
@@ -127,15 +131,9 @@ public class MqttCallbackHandler implements MqttCallback
 		else if (topic.equals("/sarah/url/"))
 		{
 			// url get
-
 			if (message.toString().equals("get"))
 			{
-				// notify the user
-				// Notify.notifcation(context, "url", intent,
-				// R.string.notifyTitle);
-
-//				MqttMessage messageHandshake = new MqttMessage(("http://xpper.com/download/sarah/DeviceDemonstracaoAndroidCelular.json").getBytes());
-				MqttMessage messageHandshake = new MqttMessage(("C:/central/DeviceDemonstracaoAndroidCelular.json").getBytes());
+				MqttMessage messageHandshake = new MqttMessage((DEVICE_URL).getBytes());
 				MqttAndroidClient client = connection.getClient();
 				try
 				{
@@ -143,12 +141,10 @@ public class MqttCallbackHandler implements MqttCallback
 				}
 				catch (MqttPersistenceException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				catch (MqttException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -259,7 +255,7 @@ public class MqttCallbackHandler implements MqttCallback
 
 		// Updating time
 		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(new Date());	
+		calendar.setTime(new Date());
 		Toast.makeText(context, calendar.getTime().toString(), Toast.LENGTH_SHORT).show();
 	}
 }
